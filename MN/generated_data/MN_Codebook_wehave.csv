@@ -1,0 +1,73 @@
+,Variable,Position,Label,Measurement Level,Role,Column Width,Alignment,Print Format,Write Format
+1,sentyear,1,Year sentenced,Scale,Input,8,Right,F4,F4
+2,county,2,County sentenced,Scale,Input,5,Right,F3,F3
+3,dcnum,3,District Court case number,Nominal,Input,12,Left,A20,A20
+4,count,4,Count number,Scale,Input,3,Right,F5,F5
+5,sentord,5,Sentencing order,Scale,Input,3,Right,F5,F5
+6,sex,6,Offender sex,Nominal,Input,8,Right,F1,F1
+7,race,7,Offender race,Nominal,Input,8,Right,F1,F1
+9,statute,9,MN Statute,Scale,Input,8,Right,F9,F9
+10,offtype,10,General offense type,Scale,Input,8,Right,F1,F1
+11,Offense,11,Offense title - coded,Scale,Input,8,Right,F4.1,F4.1
+12,doff,12,Date of  offense,Scale,Input,8,Right,DATE11,DATE11
+13,severity,13,Severity Level,Nominal,Input,8,Right,F3,F3
+14,statmax,14,Statutory maximum,Scale,Input,8,Right,F8.2,F8.2
+15,attempt,15,Attempt?,Nominal,Input,8,Right,F1,F1
+16,conspir,16,Conspiracy?,Nominal,Input,8,Right,F1,F1
+17,dngwpn,17,Dangerous weapon,Nominal,Input,8,Right,F1,F1
+18,subwpn,18,Subsequent weapon offense?,Nominal,Input,8,Right,F1,F1
+19,subsex,19,Subsequent sex offense?,Nominal,Input,8,Right,F1,F1
+20,subdrug,20,Subsequent drug offense?,Nominal,Input,8,Right,F1,F1
+21,subdwi,21,Subsequent DWI?,Scale,Input,8,Right,F1,F1
+22,subfailr,22,Subsequent fail to register as predatory offender,Nominal,Input,8,Right,F1,F1
+23,Subburg,23,1st deg burglary of occupied dwelling w prior burg,Nominal,Input,8,Right,F1,F1
+24,soljuv,24,Solicit juvenile?,Nominal,Input,8,Right,F1,F1
+25,solmimp,25,Solicit mentally impaired?,Nominal,Input,8,Right,F1,F1
+26,gangrel,26,Gang related?,Nominal,Input,8,Right,F1,F1
+27,gangrel18,27,Gang related - victim under 18?,Nominal,Input,8,Right,F1,F1
+28,typecust,28,Type of custody,Nominal,Input,8,Right,F1,F1
+29,cust,29,Custody point,Nominal,Input,8,Right,F1,F1
+30,tajud,30,Juvenile points,Nominal,Input,8,Right,F1,F1
+31,tgross,31,Misd/GM points,Nominal,Input,8,Right,F1,F1
+32,tweight,32,Total felony weight,Scale,Input,8,Right,F4.1,F4.1
+33,histall,33,Total history,Scale,Input,8,Right,F4.1,F4.1
+34,history,34,Total history (6 thru hi=6),Scale,Input,8,Right,F3,F3
+39,presumpt,39,Recommended disposition,Nominal,Input,8,Right,F1,F1
+40,time,40,Presumptive sentence - months,Scale,Input,8,Right,F6.2,F6.2
+41,Mintime,41,Lower range,Scale,Input,8,Right,F6.2,F6.2
+42,Maxtime,42,Upper range,Scale,Input,8,Right,F6.2,F6.2
+44,dconv,44,Date of conviction,Scale,Input,10,Right,DATE11,DATE11
+45,countoff,45,Num current offenses on ws,Nominal,Input,8,Right,F3,F3
+47,dsent,47,Date of sentence,Scale,Input,11,Right,DATE11,DATE11
+48,plea,48,Plea entered?,Nominal,Input,4,Right,F1,F1
+49,schap,49,Statute chapter,Nominal,Input,4,Left,A20,A20
+50,ssection,50,Statute section,Nominal,Input,5,Left,A20,A20
+51,ssubd,51,Statute subdivision,Nominal,Input,5,Left,A20,A20
+52,moc,52,MN offense code,Nominal,Input,5,Left,A10,A10
+53,prison,53,Executed prison sentence?,Scale,Input,4,Right,F3,F3
+54,confine,54,Pronounced confinement - months,Scale,Input,8,Right,F6.2,F6.2
+55,stayexec,55,Stay of execution?,Nominal,Input,3,Right,F1,F1
+56,impose,56,Stay imposition?,Nominal,Input,5,Right,F1,F1
+57,staylnth,57,Length of stay - months,Scale,Input,8,Right,F6.2,F6.2
+58,lifer,58,Received life sentence?,Scale,Input,4,Right,F1,F1
+59,jail,59,Jail as a condition of probation?,Scale,Input,4,Right,F3,F3
+60,totinc,60,Total Incarceration,Scale,Input,4,Right,F3,F3
+61,inctype,61,Incarceration Type,Scale,Input,5,Right,F1,F1
+62,condconf,62,Pron. conditional conf - days,Scale,Input,6,Right,F3,F3
+63,typeprob,63,Type of probation,Nominal,Input,3,Right,F1,F1
+64,cnscurnt,64,Consec to other offense same case num,Nominal,Input,8,Right,F1,F1
+65,cnsprior,65,Consec offense other case num,Nominal,Input,8,Right,F1,F1
+66,consec,66,Consecutive sentence?,Scale,Input,8,Right,F3,F3
+67,aggsentc,67,Aggregated sentence - months,Scale,Input,8,Right,F6.2,F6.2
+69,dispdep,69,Dispositional Departure?,Nominal,Input,8,Right,F1,F1
+70,durdep,70,Durational Departure?,Scale,Input,8,Right,F1,F1
+71,cnsdep,71,Dep from consecutive policy,Nominal,Input,8,Right,F1,F1
+72,reason1,72,Departure reason 1,Scale,Input,8,Right,F3,F3
+73,preason1,73,Plea reason 1,Nominal,Input,8,Right,F3,F3
+94,Agecat,94,Age category (at time of offense),Scale,Input,10,Right,F1,F1
+104,region,104,Region within MN,Scale,Input,8,Right,F1,F1
+105,district,105,MN Judicial District,Scale,Input,8,Right,F3,F3
+120,presumptlife,121,Presumptive life?,Nominal,Input,13,Right,F1,F1
+121,presumptlifeid,122,Presumptive life category,Nominal,Input,16,Right,F2,F2
+122,lifeminmonths,123,Life minimum months,Nominal,Input,9,Right,F11,F11
+128,sextrafficking,129,Aggravating factors under Minn. Stat. 609.322 sub. 1(b),Nominal,Input,6,Right,F1,F1
