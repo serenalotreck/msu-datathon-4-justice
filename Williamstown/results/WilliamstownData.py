@@ -91,7 +91,7 @@ def get_unit_times(unit_str):
             tm_dict[vals[0]] = vals[-1]
     return tm_dict
 
-def parse_call_list(call):
+def parse_call_list(call, debug=False):
     '''Parse a call list into a dictionary'''
     
     if len(call) == 0:
@@ -156,8 +156,9 @@ def parse_call_list(call):
                         line = line[:line.rindex(tag)]
 
             else:
-                print("Parse Error:  "+line)
-                print("")
+                if debug:
+                    print("Parse Error:  "+line)
+                    print("")
         ind +=1
 
     return(my_call)
