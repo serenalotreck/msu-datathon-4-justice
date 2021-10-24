@@ -7,3 +7,9 @@ There is a directory for each of the datasets. Inside each directory there are f
 2. **generated_data** : This folder would contain addtional data files generated during the weekend
 3. **src** : This is where all the scource code used to manipluate the data files would go
 4. **results** : These are notebook type files that would display some results/insights generated from the data.
+
+
+
+The environment.yml file is used to create a conda environment with needed libraries (currently tested only on williamston). To install the environment use the following command:
+
+```conda env create --prefix ./envs --file environment.yml```
