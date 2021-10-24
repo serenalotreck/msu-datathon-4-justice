@@ -9,8 +9,8 @@ import re # Regulra expresion library
 
 def cleanstring(line, lower=False):
     '''Clean up white space in string with an option to set to lowercase.'''
-    line = line.rstrip().lstrip()
-    line = re.sub(' +', ' ',line)
+    line = line.rstrip().lstrip() #Strip leading and tailing whitespace
+    line = re.sub(' +', ' ',line) #Replace redundant whitespace
     if lower:
         line = line.lower()
     return line

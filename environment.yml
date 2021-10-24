@@ -1,0 +1,11 @@
+name: /Users/colbrydi/Desktop/msu-datathon-4-justice/envs
+channels:
+  - defaults
+dependencies:
+  - pip
+  - jupyter
+  - conda
+  - pandas
+  - matplotlib
+  - pip:
+    - fuzzywuzzy
