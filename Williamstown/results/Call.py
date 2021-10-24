@@ -7,6 +7,19 @@ def readfile(filename):
     return lines
 
 
+def reformat(string):
+    while string[0] == " ":
+        string = string[1:]
+    while string[-1] == " " or string[-1] == '\n':
+        string = string[:-1]
+    string = re.sub("\s+", " ", string)
+    return string
+
+
+def minutes(string):
+    return (60*int(string[:2]) + int(string[3:5]) + int(string[6:])/60)
+
+
 def separateCalls(data):
     calls = []
     currentCall = None
@@ -35,14 +48,14 @@ class Call:
         self.text = []
         self.date = date
         self.dict = {}
-
-    def reformat(self, string):
-        while string[0] == " ":
-            string = string[1:]
-        while string[-1] == " " or string[-1] == '\n':
-            string = string[:-1]
-        string = re.sub("\s+", " ", string)
-        return string
+        
+    
+    def arvd_to_clrd(self):
+        units = []
+        for unit in self.dict["Units"]:
+            if ('Arvd' in unit[1]) and ('Clrd' in unit[1]):
+                units.append((unit[0], minutes(unit[1]['Clrd']) - minutes(unit[1]['Arvd'])))
+        return units
 
     def parse_header(self):
 
@@ -72,8 +85,8 @@ class Call:
                 spaces = 0
             index -= 1
 
-        callReason = self.reformat(line[index_past:index])
-        callAction = self.reformat(line[index + 8:])
+        callReason = reformat(line[index_past:index])
+        callAction = reformat(line[index + 8:])
 
         return [callNumber, callTime, callReason, callAction]
 
