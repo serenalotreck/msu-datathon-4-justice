@@ -1,4 +1,16 @@
 import re # Regulra expresion library
+import datetime
+
+# wanting to catch things looking like "For Date: mm/dd/yyyy" as these are 
+# manually inserted headers to tag the calls based on calendar date.
+# They appear once in the pdf file and apply to all calls beneath them 
+# until the next "For Date" appears.
+
+# hacky implementation: using a global variable and modifying the output of 
+# txt2calls to have tuples as outputs which include the datetimes as well as 
+# the original output.
+global current_date
+current_date = datetime.date(year=1970,month=1,day=1)
 
 # read file in as a list of lines
 def readfile(filename):
@@ -10,20 +22,54 @@ def readfile(filename):
         lines[ind] = lines[ind].lstrip().rstrip()
     return lines
 
+def fetch_date(line):
+    '''
+    Checks if a line matches the "For Date" pattern.
+    
+    Inputs:
+        line; a string.
+    Returns:
+        match: boolean; whether there was a match.
+        dt: either a datetime.date object if match is True, else None.
+    '''
+    import datetime
+    
+    fordate_pattern = 'For[\ \t]{1,}Date:[\ \t]{1,}([0-9]{2})\/([0-9]{2})\/([0-9]{4}).*'
+    fordate_prog = re.compile(fordate_pattern)
+    match = fordate_prog.match(line)
+    if match is None:
+        return (False, match)
+    else:
+        elements = match.groups()
+        dt = datetime.date(
+            month=int(elements[0]), 
+            day=int(elements[1]), 
+            year=int(elements[2])
+            )
+        return (True, dt)
+    #
+#
+
 # Parse cells using 20-1 regular expresisons
 # Result is a list of list where each call is a list of lines for the call.
 
 def txt2calls(lines):
+    global current_date
     calls = []
 
     call = []
     for line in lines:
         if line == '':
             pass
+        # check to see if the date has changed.
+        date_questionmark = fetch_date(line)
+        if date_questionmark[0]:    # if true, second entry should be datetime
+            current_date = date_questionmark[1]
         else:
             if re.match("[1-2][9,0]-[0-9]+\s", line[:10]):
                 if len(call) > 0:
-                    calls.append(call)
+                    #calls.append(call)
+                    calls.append( (current_date, call) )
                     call = []
             call.append(line)
     if len(call) > 0:
@@ -168,7 +214,11 @@ def parse_all_calls(calls):
     call_dicts =[]
     unit = ''
     for call in calls:
-        my_call = parse_call_list(call)
+        dt = call[0]    # calendar date of call
+        
+        my_call = parse_call_list(call[1])
+        my_call['date'] = dt # add in datetime to dictionary.
+        
         call_dicts.append(my_call)
     return call_dicts
 
