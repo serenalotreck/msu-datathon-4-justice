@@ -1,7 +1,24 @@
+'''
+This Library is going to read the text file generated using the http://avepdf.com/ website from the Williamstown pdf files. 
+
+NOTE: It is "working" enough to start gathering statistics.  However, there are still a ton of errors. 
+
+'''
+
 import re # Regulra expresion library
+
+def cleanstring(line, lower=False):
+    '''Clean up white space in string with an option to set to lowercase.'''
+    line = line.rstrip().lstrip()
+    line = re.sub(' +', ' ',line)
+    if lower:
+        line = line.lower()
+    return line
 
 # read file in as a list of lines
 def readfile(filename):
+    '''Trivially simple command to read in a file as a list of 
+    lines while stripping off leading and training spaces'''
     lines = []
     with open(filename) as f:
         lines = f.readlines()
@@ -10,12 +27,12 @@ def readfile(filename):
         lines[ind] = lines[ind].lstrip().rstrip()
     return lines
 
-# Parse cells using 20-1 regular expresisons
-# Result is a list of list where each call is a list of lines for the call.
 
 def txt2calls(lines):
+    '''Spit the lines of a file into seperate calls using Parse cells using call 
+    number [19,20]-XXXX as deliminator. The Result is a list of list where each 
+    call is a list of lines for the call.'''
     calls = []
-
     call = []
     for line in lines:
         if line == '':
@@ -32,7 +49,6 @@ def txt2calls(lines):
 
 def parseHeader(line):
     '''Parse the first line of each call. Use error checking to find components.'''
-#     print(line)
     index_past = 0
         
     callNumberMatch = re.search("[19,20]-\d+", line)
@@ -82,17 +98,23 @@ def parseHeader(line):
     return [callNumber, callTime, callReason, callAction]
 
 def get_unit_times(unit_str):
-#     print(unit_str)
-    times = re.sub(' +', ' ',unit_str).split(' ')
+    '''Parse the Unit times list into seperate times. Example includes:
+    
+        Arvd-08:35:49          Clrd-08:36:00
+    '''
+    unit_str = cleanstring(unit_str, lower=False)
+    times = unit_str.split(' ')
     tm_dict = {}
     for tm in times:
         if '-' in tm:
             vals = tm.split('-')
-            tm_dict[vals[0]] = vals[-1]
+            tm_dict[vals[0].lower()] = vals[-1]
     return tm_dict
 
 def parse_call_list(call, debug=False):
     '''Parse a call list into a dictionary'''
+    
+    unit_times = ['disp', 'arvd', 'enrt', 'clrd']
     
     if len(call) == 0:
         return
@@ -101,59 +123,63 @@ def parse_call_list(call, debug=False):
     
     header = parseHeader(call[0])
     if header: 
-        my_call['callNumber'] = header[0]
-        my_call['callTime'] = header[1]
-        my_call['callReason'] = header[2]
-        my_call['callAction']= header[3]
-#     my_call['header'] = call[0]
-    
+        my_call['number'] = header[0]
+        my_call['time'] = header[1]
+        my_call['reason'] = header[2]
+        my_call['action']= header[3]
+        
     ind = 0
     individual = ''
     while ind < len(call):
         line = call[ind]
         myline = line.split(':')
         if len(myline) == 2:
-            tag = myline[0].rstrip().lstrip()
-            tag = re.sub(' +', ' ',tag)
-            value = myline[1].rstrip().lstrip()
-            if tag == 'Narrative':
-                if tag in my_call:
-                    narrative = my_call['Narrative']
-                else:
-                    narrative = ''
-                ind +=1
-                while ind < len(call):
-                    myline = call[ind].split(':')
-                    if len(myline) == 1:
-                        narrative += re.sub(' +', ' ',call[ind]) + " "
-                    ind += 1
-                my_call['Narrative'] = narrative
+            tag = cleanstring(myline[0], lower=True)
+            value = cleanstring(myline[1], lower=False)
+            if tag[:4] in unit_times:
+                print("unit error: "+tag)
             else:
-                if tag == "Unit":
-                    ind += 1;
-                    if ind < len(call):
-                        unit_info = get_unit_times(call[ind])
-                        if 'Units' in my_call:
-                            my_call['Units'].append((value, unit_info))
-                        else:
-                            my_call['Units'] = [(value, unit_info)]
+                if tag == 'narrative':
+                    if tag in my_call:
+                        narrative = my_call['narrative']
+                    else:
+                        narrative = ''
+                    ind +=1
+                    while ind < len(call):
+                        myline = call[ind].split(':')
+                        if len(myline) == 1:
+                            narrative += re.sub(' +', ' ',call[ind]) + " "
+                        ind += 1
+                    my_call['narrative'] = narrative
                 else:
-                    if tag == "Operator" or tag == "Owner":
-                        individual=tag+"_"
-                    my_call[tag] = value
+                    if tag == "unit":
+                        ind += 1;
+                        if ind < len(call):
+                            unit_info = get_unit_times(call[ind])
+                            if 'Units' in my_call:
+                                my_call['Units'].append((value, unit_info))
+                            else:
+                                my_call['Units'] = [(value, unit_info)]
+                    else:
+                        if tag == "operator" or tag == "owner":
+                            individual=tag+"_"
+                        my_call[tag] = value
         else:
             if len(myline) > 2:
-                #print(line)
-                tags = re.findall('[\S]+:', line)
+                if myline[:4] in unit_times:
+                    print("unit error: "+tag)
+                else:
+                    #print(line)
+                    tags = re.findall('[\S]+:', line)
 
-                for tag in reversed(tags):
-                    start = line.rindex(tag)
-                    value = line[start+len(tag):].rstrip().lstrip()
+                    for tag in reversed(tags):
+                        start = line.rindex(tag)
+                        value = cleanstring(line[start+len(tag):], lower=True)
 
-                    if len(value) > 0:
-                        tag = tag[:-1]
-                        my_call[individual+tag] = value
-                        line = line[:line.rindex(tag)]
+                        if len(value) > 0:
+                            tag = tag[:-1]
+                            my_call[(individual+tag).lower()] = value
+                            line = line[:line.rindex(tag)]
 
             else:
                 if debug:
@@ -172,9 +198,8 @@ def parse_all_calls(calls):
         call_dicts.append(my_call)
     return call_dicts
 
-
-#Combine everything into one call
 def parsefile(filename):
+    '''Combine everything into one function call'''
     lines = readfile(filename)
     calls = txt2calls(lines)
     call_dicts = parse_all_calls(calls)
